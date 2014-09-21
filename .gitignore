@@ -1,0 +1,6 @@
+boost
+*.a
+*.o
+*.tar.*
+
+.DS_Store

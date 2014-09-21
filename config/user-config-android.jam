@@ -1,0 +1,37 @@
+import os ;  
+  
+if [ os.name ] = CYGWIN || [ os.name ] = NT  
+{  
+    androidPlatform = windows ;  
+}  
+else if [ os.name ] = LINUX  
+{  
+    androidPlatform = linux-x86 ;  
+}  
+else if [ os.name ] = MACOSX  
+{  
+    androidPlatform = darwin-x86 ;  
+}
+  
+modules.poke : NO_BZIP2 : 1 ;  
+ANDROID_NDK = /Users/osiris/Sviluppo/Android/android-ndk-r9d ;  
+using gcc : android :  
+$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-g++ :  
+<compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-arm  
+<compileflags>-mthumb  
+<compileflags>-Os  
+<compileflags>-fno-strict-aliasing  
+<compileflags>-O2  
+<compileflags>-DNDEBUG  
+<compileflags>-g  
+<compileflags>-lstdc++  
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.8/include
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi/include
+<compileflags>-D__GLIBC__
+<compileflags>-D_GLIBCXX__PTHREADS
+<compileflags>-D__arm__
+<compileflags>-D_REENTRANT
+<archiver>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ar  
+<ranlib>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ranlib  
+;
+
