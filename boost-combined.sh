@@ -1,5 +1,5 @@
 #!/bin/sh
 
-./boost-iosx.sh
-./boost-android.sh
+sh boost-iosx.sh
+sh boost-android.sh
 
