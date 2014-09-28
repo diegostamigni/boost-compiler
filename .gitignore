@@ -4,3 +4,5 @@ boost
 *.tar.*
 
 .DS_Store
+ios
+osx
