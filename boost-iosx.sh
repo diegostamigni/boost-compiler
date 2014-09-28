@@ -1,3 +1,4 @@
+#!/bin/bash
 #===============================================================================
 # Filename:  boost.sh
 # Author:    Pete Goodliffe
@@ -18,12 +19,13 @@
 # same directory as this script, and run "./boost.sh". Grab a cuppa. And voila.
 #===============================================================================
 
-#:${BOOST_LIBS:="filesystem date_time system"}
-:${BOOST_LIBS:="chrono context filesystem graph_parallel iostreams locale mpi program_options python regex serialization signals system thread timer wave date_time graph math random test exception"}
+#: ${BOOST_LIBS:="chrono context filesystem graph_parallel iostreams locale mpi program_options python regex serialization signals system thread timer wave date_time graph math random test exception"}
+#: ${BOOST_LIBS:="system"}
+source bootstrap.sh
 : ${IPHONE_SDKVERSION:=8.0}
 : ${OSX_SDKVERSION:=10.9}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
-: ${EXTRA_CPPFLAGS:="-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++11 -stdlib=libc++"}
+: ${EXTRA_CPPFLAGS:="-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++14 -stdlib=libc++"}
 
 # The EXTRA_CPPFLAGS definition works around a thread race issue in
 # shared_ptr. I encountered this historically and have not verified that
