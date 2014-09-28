@@ -1,4 +1,4 @@
 #!/bin/bash
 
-: ${BOOST_LIBS:="system"}
+: ${BOOST_LIBS:="system signals"}
 
