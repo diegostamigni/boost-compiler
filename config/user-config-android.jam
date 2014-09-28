@@ -14,7 +14,9 @@ else if [ os.name ] = MACOSX
 }
   
 modules.poke : NO_BZIP2 : 1 ;  
-ANDROID_NDK = /Users/osiris/Sviluppo/Android/android-ndk-r9d ;  
+
+local ANDROID_NDK = [ os.environ NDK_ROOT ] ; 
+
 using gcc : android :  
 $(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-g++ :  
 <compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-arm  
