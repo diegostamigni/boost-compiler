@@ -27,4 +27,4 @@
 # - test
 # - exception
 
-: ${BOOST_LIBS:="system signals filesystem"}
+: ${BOOST_LIBS:="system signals filesystem regex"}
