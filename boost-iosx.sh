@@ -22,7 +22,7 @@
 #: ${BOOST_LIBS:="chrono context filesystem graph_parallel iostreams locale mpi program_options python regex serialization signals system thread timer wave date_time graph math random test exception"}
 #: ${BOOST_LIBS:="system"}
 source bootstrap.sh
-: ${IPHONE_SDKVERSION:=8.0}
+: ${IPHONE_SDKVERSION:=8.1}
 : ${OSX_SDKVERSION:=10.9}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
 : ${EXTRA_CPPFLAGS:="-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++11 -stdlib=libc++"}
