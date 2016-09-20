@@ -1,7 +1,7 @@
 #!/bin/bash
 ##
 #### Diego Stamigni
-#### diego.stamigni@liveboxcloud.com
+#### diego.stamigni@gmail.com
 
 # Available libs that can be built are listed below:
 # - chrono
