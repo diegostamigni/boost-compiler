@@ -43,6 +43,7 @@ source bootstrap.sh
 : ${OSXFRAMEWORKDIR:=`pwd`/osx/framework}
 : ${COMPILER:="clang++"}
 
+BOOST_VERSION=1.60.0
 BOOST_SRC=$SRCDIR/boost
 
 #===============================================================================
@@ -293,7 +294,6 @@ mkdir -p $IOSBUILDDIR
 cleanEverythingReadyToStart
 updateBoost
 
-BOOST_VERSION=1.55.0
 echo "BOOST_VERSION:     $BOOST_VERSION"
 echo "BOOST_LIBS:        $BOOST_LIBS"
 echo "BOOST_SRC:         $BOOST_SRC"

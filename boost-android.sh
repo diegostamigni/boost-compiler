@@ -12,8 +12,8 @@ echo "Bootstrapping (with libs $BOOST_LIBS_COMMA)"
 
 ./bootstrap.sh --with-libraries=$BOOST_LIBS_COMMA
 #./bjam --without-python --without-serialization link=static runtime-link=static target-os=linux --stagedir=../android-build toolset=gcc-android
-./bjam -j16 --build-dir=../android-build --stagedir=../android-build/stage --prefix=$PREFIXDIR architecture=arm define=_LITTLE_ENDIAN link=static  toolset=gcc-android stage
-#./bjam -j16 --build-dir=../android-build --stagedir=../android-build/stage --prefix=$PREFIXDIR architecture=arm define=_LITTLE_ENDIAN link=static toolset=gcc-android install
+./bjam --build-dir=../android-build --stagedir=../android-build/stage --prefix=$PREFIXDIR architecture=arm define=_LITTLE_ENDIAN link=static  toolset=gcc-android stage
+#./bjam --build-dir=../android-build --stagedir=../android-build/stage --prefix=$PREFIXDIR architecture=arm define=_LITTLE_ENDIAN link=static toolset=gcc-android install
 
 cd ../
 cd android-build/stage/lib
