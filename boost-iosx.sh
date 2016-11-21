@@ -115,9 +115,14 @@ inventMissingHeaders()
 bootstrapBoost()
 {
     cd $BOOST_SRC
-    BOOST_LIBS_COMMA=$(echo $BOOST_LIBS | sed -e "s/ /,/g")
-    echo "Bootstrapping (with libs $BOOST_LIBS_COMMA)"
-    ./bootstrap.sh --with-libraries=$BOOST_LIBS_COMMA
+    if [[ $BOOST_LIBS = *[!\ ]* ]]; then
+        BOOST_LIBS_COMMA=$(echo $BOOST_LIBS | sed -e "s/ /,/g")
+        echo "Bootstrapping (with libs $BOOST_LIBS_COMMA)"
+        ./bootstrap.sh --with-libraries=$BOOST_LIBS_COMMA
+    else
+        echo "Bootstrapping (with all libs)"
+        ./bootstrap.sh
+    fi
     doneSection
 }
 
@@ -361,12 +366,14 @@ inventMissingHeaders
 bootstrapBoost
 buildBoostForiPhoneOS
 scrunchAllLibsTogetherInOneLibPerPlatform
+
 buildFramework $IOSFRAMEWORKDIR $IOSBUILDDIR
 buildIOSUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
 packIOSUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
+
 buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR
-buildOSXUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
-packOSXUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
+buildOSXUniversalLib $OSXFRAMEWORKDIR $OSXBUILDDIR
+packOSXUniversalLib $OSXFRAMEWORKDIR $OSXBUILDDIR
 
 echo "Completed successfully"
 

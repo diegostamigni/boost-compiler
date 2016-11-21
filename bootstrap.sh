@@ -9,18 +9,21 @@
 # - container
 # - context
 # - coroutine
+# - coroutine2
 # - date_time
 # - exception
 # - fiber
 # - filesystem
 # - graph
+# - graph_parallel
 # - iostreams
 # - locale
 # - log
 # - math
+# - metaparse
 # - mpi
-# - prg_exec_monitor
 # - program_options
+# - python
 # - random
 # - regex
 # - serialization
@@ -30,8 +33,6 @@
 # - thread
 # - timer
 # - type_erasure
-# - unit_test
 # - wave
-# - wserialization
 
-: ${BOOST_LIBS:="log system thread"}
+: ${BOOST_LIBS:="atomic chrono container context coroutine coroutine2 date_time exception fiber filesystem graph graph_parallel iostreams locale log math metaparse mpi program_options python random regex serialization signals system test thread timer type_erasure wave"}
