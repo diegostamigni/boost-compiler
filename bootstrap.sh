@@ -4,27 +4,34 @@
 #### diego.stamigni@gmail.com
 
 # Available libs that can be built are listed below:
+# - atomic
 # - chrono
+# - container
 # - context
+# - coroutine
+# - date_time
+# - exception
+# - fiber
 # - filesystem
-# - graph_parallel
+# - graph
 # - iostreams
 # - locale
+# - log
+# - math
 # - mpi
+# - prg_exec_monitor
 # - program_options
-# - python
+# - random
 # - regex
 # - serialization
 # - signals
 # - system
+# - test
 # - thread
 # - timer
+# - type_erasure
+# - unit_test
 # - wave
-# - date_time
-# - graph
-# - math
-# - random
-# - test
-# - exception
+# - wserialization
 
 : ${BOOST_LIBS:="system regex"}

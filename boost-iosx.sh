@@ -89,6 +89,7 @@ updateBoost()
 		git checkout $BOOST_SRC/tools/build/v2/user-config.jam
 	else
 		git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
+        git checkout tags/$BOOST_VERSION -b $BOOST_VERSION
 		pushd $BOOST_SRC
 		./bootstrap.sh
 		./b2 headers
