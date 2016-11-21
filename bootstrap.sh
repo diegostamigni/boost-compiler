@@ -34,4 +34,4 @@
 # - wave
 # - wserialization
 
-: ${BOOST_LIBS:="system regex"}
+: ${BOOST_LIBS:="log system thread"}

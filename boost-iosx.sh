@@ -22,8 +22,8 @@
 #: ${BOOST_LIBS:="chrono context filesystem graph_parallel iostreams locale mpi program_options python regex serialization signals system thread timer wave date_time graph math random test exception"}
 #: ${BOOST_LIBS:="system"}
 source bootstrap.sh
-: ${IPHONE_SDKVERSION:=8.1}
-: ${OSX_SDKVERSION:=10.9}
+: ${IPHONE_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "iOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
+: ${OSX_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "macOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
 : ${XCODE_ROOT:=`xcode-select -print-path`}
 : ${EXTRA_CPPFLAGS:="-DBOOST_AC_USE_PTHREADS -DBOOST_SP_USE_PTHREADS -std=c++11 -stdlib=libc++"}
 
@@ -286,6 +286,20 @@ EOF
     doneSection
 }
 
+buildIOSUniversalLib()
+{
+	cd $SRCDIR
+
+    OUTPUT_NAME="libboost.a"
+    LIBS_TO_BE_MERGED="$IOSBUILDDIR/armv7/$OUTPUT_NAME \
+        $IOSBUILDDIR/armv7s/$OUTPUT_NAME \
+        $IOSBUILDDIR/arm64/$OUTPUT_NAME \
+        $IOSBUILDDIR/i386/$OUTPUT_NAME"
+
+    libtool -static -a ${LIBS_TO_BE_MERGED} -o $IOSBUILDDIR/${OUTPUT_NAME}
+    echo "Universal ${OUTPUT_NAME} successfully created in $IOSBUILDDIR"   
+}
+
 #===============================================================================
 # Execution starts here
 #===============================================================================
@@ -314,6 +328,7 @@ buildBoostForiPhoneOS
 scrunchAllLibsTogetherInOneLibPerPlatform
 buildFramework $IOSFRAMEWORKDIR $IOSBUILDDIR
 buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR
+buildIOSUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
 
 echo "Completed successfully"
 
