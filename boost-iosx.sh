@@ -300,6 +300,41 @@ buildIOSUniversalLib()
     echo "Universal ${OUTPUT_NAME} successfully created in $IOSBUILDDIR"   
 }
 
+packIOSUniversalLib()
+{
+	cd $SRCDIR
+
+    OUTPUT_DIR="$IOSBUILDDIR/../static"
+    OUTPUT_NAME="libboost.a"
+
+    mkdir -p $OUTPUT_DIR
+    cp $IOSBUILDDIR/${OUTPUT_NAME} $OUTPUT_DIR
+    rsync -avp ${IOSBUILDDIR}/../prefix/include/* $OUTPUT_DIR
+}
+
+buildOSXUniversalLib()
+{
+	cd $SRCDIR
+
+    OUTPUT_NAME="libboost.a"
+    LIBS_TO_BE_MERGED="$OSXBUILDDIR/x86_64/$OUTPUT_NAME \
+        $OSXBUILDDIR/i386/$OUTPUT_NAME"
+
+    libtool -static -a ${LIBS_TO_BE_MERGED} -o $OSXBUILDDIR/${OUTPUT_NAME}
+    echo "Universal ${OUTPUT_NAME} successfully created in $OSXBUILDDIR"   
+}
+
+packOSXUniversalLib()
+{
+	cd $SRCDIR
+
+    OUTPUT_DIR="$OSXBUILDDIR/../static"
+    OUTPUT_NAME="libboost.a"
+
+    mkdir -p $OUTPUT_DIR
+    cp $OSXBUILDDIR/${OUTPUT_NAME} $OUTPUT_DIR
+}
+
 #===============================================================================
 # Execution starts here
 #===============================================================================
@@ -327,8 +362,11 @@ bootstrapBoost
 buildBoostForiPhoneOS
 scrunchAllLibsTogetherInOneLibPerPlatform
 buildFramework $IOSFRAMEWORKDIR $IOSBUILDDIR
-buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR
 buildIOSUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
+packIOSUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
+buildFramework $OSXFRAMEWORKDIR $OSXBUILDDIR
+buildOSXUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
+packOSXUniversalLib $IOSFRAMEWORKDIR $IOSBUILDDIR
 
 echo "Completed successfully"
 
