@@ -18,9 +18,15 @@
 # Then go get the source tar.bz of the boost you want to build, shove it in the
 # same directory as this script, and run "./boost.sh". Grab a cuppa. And voila.
 #===============================================================================
-
-#: ${BOOST_LIBS:="chrono context filesystem graph_parallel iostreams locale mpi program_options python regex serialization signals system thread timer wave date_time graph math random test exception"}
-#: ${BOOST_LIBS:="system"}
+# Configuration section
+#===============================================================================
+BOOST_VERSION=1.60.0
+BOOST_SRC=$SRCDIR/boost
+IOS_MIN_VERSION=8.0
+OSX_MIN_VERSION=10.9
+#===============================================================================
+# End configuration section
+#===============================================================================
 source bootstrap.sh
 : ${IPHONE_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "iOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
 : ${OSX_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "macOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
@@ -42,9 +48,6 @@ source bootstrap.sh
 : ${IOSFRAMEWORKDIR:=`pwd`/ios/framework}
 : ${OSXFRAMEWORKDIR:=`pwd`/osx/framework}
 : ${COMPILER:="clang++"}
-
-BOOST_VERSION=1.60.0
-BOOST_SRC=$SRCDIR/boost
 
 #===============================================================================
 # Functions
@@ -134,7 +137,7 @@ buildBoostForiPhoneOS()
     
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphone
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -miphoneos-version-min=$IOS_MIN_VERSION -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneOS.platform/Developer
    : <architecture>arm <target-os>iphone
    ;
@@ -147,7 +150,7 @@ EOF
 	
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphonesim
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -fvisibility-inlines-hidden -miphoneos-version-min=$IOS_MIN_VERSION $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneSimulator.platform/Developer
    : <architecture>x86 <target-os>iphone
    ;
@@ -158,7 +161,7 @@ EOF
 	doneSection
 
 	echo "Building for osx..."
-	./b2 -j16 --build-dir=../osx-build --stagedir=../osx-build/stage toolset=clang cxxflags="-std=c++11 -stdlib=libc++ -arch i386 -arch x86_64" linkflags="-stdlib=libc++" link=static threading=multi stage
+	./b2 -j16 --build-dir=../osx-build --stagedir=../osx-build/stage toolset=clang cxxflags="-std=c++11 -stdlib=libc++ -arch i386 -arch x86_64 -mmacosx-version-min=$OSX_MIN_VERSION" linkflags="-stdlib=libc++" link=static threading=multi stage
     doneSection
 }
 
