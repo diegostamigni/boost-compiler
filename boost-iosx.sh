@@ -21,12 +21,13 @@
 # Configuration section
 #===============================================================================
 BOOST_VERSION=1.60.0
-BOOST_SRC=$SRCDIR/boost
 IOS_MIN_VERSION=8.0
 OSX_MIN_VERSION=10.9
 #===============================================================================
 # End configuration section
 #===============================================================================
+SRCDIR=$(pwd)
+BOOST_SRC=$SRCDIR/boost
 source bootstrap.sh
 : ${IPHONE_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "iOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
 : ${OSX_SDKVERSION:=`xcodebuild -showsdks 2> /dev/null | grep "macOS SDKs" -A 1 | tail -n 1 | awk '{print $2}'`}
@@ -92,7 +93,7 @@ updateBoost()
 		git checkout $BOOST_SRC/tools/build/v2/user-config.jam
 	else
 		git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
-        git checkout tags/boost-$BOOST_VERSION -b boost-$BOOST_VERSION
+        git checkout tags/boost-$BOOST_VERSION
 		pushd $BOOST_SRC
 		./bootstrap.sh
 		./b2 headers
