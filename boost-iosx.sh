@@ -92,7 +92,7 @@ updateBoost()
 		git checkout $BOOST_SRC/tools/build/v2/user-config.jam
 	else
 		git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
-        git checkout tags/$BOOST_VERSION -b $BOOST_VERSION
+        git checkout tags/boost-$BOOST_VERSION -b boost-$BOOST_VERSION
 		pushd $BOOST_SRC
 		./bootstrap.sh
 		./b2 headers
@@ -155,9 +155,13 @@ using darwin : ${IPHONE_SDKVERSION}~iphonesim
    : <architecture>x86 <target-os>iphone
    ;
 EOF
-
-	echo "Building for simulator..."
+    
+    echo "Building for simulator i386..."
     ./bjam -j16 --build-dir=../iphonesim-build --stagedir=../iphonesim-build/stage --toolset=darwin architecture=x86 target-os=iphone macosx-version=iphonesim-${IPHONE_SDKVERSION} link=static stage
+	doneSection
+
+	echo "Building for simulator x86_64..."
+    ./bjam -j16 --build-dir=../iphonesim-build-x86_64 --stagedir=../iphonesim-build-x86_64/stage --toolset=darwin architecture=x86_64 target-os=iphone macosx-version=iphonesim-${IPHONE_SDKVERSION} link=static stage
 	doneSection
 
 	echo "Building for osx..."
@@ -175,6 +179,7 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
     mkdir -p $IOSBUILDDIR/armv7s/obj
     mkdir -p $IOSBUILDDIR/arm64/obj
     mkdir -p $IOSBUILDDIR/i386/obj
+    mkdir -p $IOSBUILDDIR/x86_64/obj
 
     mkdir -p $OSXBUILDDIR/i386/obj
     mkdir -p $OSXBUILDDIR/x86_64/obj
@@ -190,6 +195,7 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         xcrun lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin arm64 -o $IOSBUILDDIR/arm64/libboost_$NAME.a
 
         cp "iphonesim-build/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/i386/
+        cp "iphonesim-build-x86_64/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/x86_64/
 
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin i386 -o $OSXBUILDDIR/i386/libboost_$NAME.a
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin x86_64 -o $OSXBUILDDIR/x86_64/libboost_$NAME.a
@@ -202,6 +208,7 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         (cd $IOSBUILDDIR/armv7s/obj; ar -x ../$NAME );
         (cd $IOSBUILDDIR/arm64/obj; ar -x ../$NAME );
         (cd $IOSBUILDDIR/i386/obj; ar -x ../$NAME );
+        (cd $IOSBUILDDIR/x86_64/obj; ar -x ../$NAME );
 
         (cd $OSXBUILDDIR/i386/obj; ar -x ../$NAME );
         (cd $OSXBUILDDIR/x86_64/obj; ar -x ../$NAME );
@@ -209,20 +216,21 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
 
     echo "Linking each architecture into an uberlib ($ALL_LIBS => libboost.a )"
     rm $IOSBUILDDIR/*/libboost.a
-    echo ...armv7
+    echo ...ios-armv7
     (cd $IOSBUILDDIR/armv7; xcrun ar crus libboost.a obj/*.o; )
-    echo ...armv7s
+    echo ...ios-armv7s
     (cd $IOSBUILDDIR/armv7s; xcrun ar crus libboost.a obj/*.o; )
-    echo ...arm64
+    echo ...ios-arm64
     (cd $IOSBUILDDIR/arm64; xcrun ar crus libboost.a obj/*.o; )
-    echo ...i386
+    echo ...ios-i386
     (cd $IOSBUILDDIR/i386;  xcrun ar crus libboost.a obj/*.o; )
+    echo ...ios-x86_64
+    (cd $IOSBUILDDIR/x86_64;  xcrun ar crus libboost.a obj/*.o; )
 
     rm $OSXBUILDDIR/*/libboost.a
     echo ...osx-i386
     (cd $OSXBUILDDIR/i386;  xcrun ar crus libboost.a obj/*.o; )
-
-    echo ...x86_64
+    echo ...osx-x86_64
     (cd $OSXBUILDDIR/x86_64;  xcrun ar crus libboost.a obj/*.o; )
 }
 
@@ -302,7 +310,8 @@ buildIOSUniversalLib()
     LIBS_TO_BE_MERGED="$IOSBUILDDIR/armv7/$OUTPUT_NAME \
         $IOSBUILDDIR/armv7s/$OUTPUT_NAME \
         $IOSBUILDDIR/arm64/$OUTPUT_NAME \
-        $IOSBUILDDIR/i386/$OUTPUT_NAME"
+        $IOSBUILDDIR/i386/$OUTPUT_NAME \
+        $IOSBUILDDIR/x86_64/$OUTPUT_NAME"
 
     libtool -static -a ${LIBS_TO_BE_MERGED} -o $IOSBUILDDIR/${OUTPUT_NAME}
     echo "Universal ${OUTPUT_NAME} successfully created in $IOSBUILDDIR"   
