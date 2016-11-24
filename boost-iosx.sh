@@ -151,7 +151,7 @@ EOF
 	
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphonesim
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -fvisibility-inlines-hidden -miphoneos-version-min=$IOS_MIN_VERSION $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -arch x86_64 -fvisibility-inlines-hidden -miphoneos-version-min=$IOS_MIN_VERSION $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneSimulator.platform/Developer
    : <architecture>x86 <target-os>iphone
    ;
@@ -159,10 +159,6 @@ EOF
     
     echo "Building for simulator i386..."
     ./bjam -j16 --build-dir=../iphonesim-build --stagedir=../iphonesim-build/stage --toolset=darwin architecture=x86 target-os=iphone macosx-version=iphonesim-${IPHONE_SDKVERSION} link=static stage
-	doneSection
-
-	echo "Building for simulator x86_64..."
-    ./bjam -j16 --build-dir=../iphonesim-build-x86_64 --stagedir=../iphonesim-build-x86_64/stage --toolset=darwin architecture=x86_64 target-os=iphone macosx-version=iphonesim-${IPHONE_SDKVERSION} link=static stage
 	doneSection
 
 	echo "Building for osx..."
@@ -194,9 +190,11 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         xcrun lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin armv7 -o $IOSBUILDDIR/armv7/libboost_$NAME.a
         xcrun lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin armv7s -o $IOSBUILDDIR/armv7s/libboost_$NAME.a
         xcrun lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin arm64 -o $IOSBUILDDIR/arm64/libboost_$NAME.a
+		xcrun lipo "iphonesim-build/stage/lib/libboost_$NAME.a" -thin i386 -o $IOSBUILDDIR/i386/libboost_$NAME.a
+		xcrun lipo "iphonesim-build/stage/lib/libboost_$NAME.a" -thin x86_64 -o $IOSBUILDDIR/x86_64/libboost_$NAME.a
 
-        cp "iphonesim-build/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/i386/
-        cp "iphonesim-build-x86_64/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/x86_64/
+        #cp "iphonesim-build/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/i386/
+        #cp "iphonesim-build-x86_64/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/x86_64/
 
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin i386 -o $OSXBUILDDIR/i386/libboost_$NAME.a
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin x86_64 -o $OSXBUILDDIR/x86_64/libboost_$NAME.a
