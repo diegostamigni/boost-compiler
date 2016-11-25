@@ -138,7 +138,7 @@ buildBoostForiPhoneOS()
     
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphone
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -miphoneos-version-min=$IOS_MIN_VERSION -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -miphoneos-version-min=$IOS_MIN_VERSION -fembed-bitcode -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneOS.platform/Developer
    : <architecture>arm <target-os>iphone
    ;
@@ -192,9 +192,6 @@ scrunchAllLibsTogetherInOneLibPerPlatform()
         xcrun lipo "iphone-build/stage/lib/libboost_$NAME.a" -thin arm64 -o $IOSBUILDDIR/arm64/libboost_$NAME.a
 		xcrun lipo "iphonesim-build/stage/lib/libboost_$NAME.a" -thin i386 -o $IOSBUILDDIR/i386/libboost_$NAME.a
 		xcrun lipo "iphonesim-build/stage/lib/libboost_$NAME.a" -thin x86_64 -o $IOSBUILDDIR/x86_64/libboost_$NAME.a
-
-        #cp "iphonesim-build/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/i386/
-        #cp "iphonesim-build-x86_64/stage/lib/libboost_$NAME.a" $IOSBUILDDIR/x86_64/
 
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin i386 -o $OSXBUILDDIR/i386/libboost_$NAME.a
         xcrun lipo "osx-build/stage/lib/libboost_$NAME.a" -thin x86_64 -o $OSXBUILDDIR/x86_64/libboost_$NAME.a
