@@ -1,4 +1,4 @@
 #!/bin/sh
 
-sh boost-iosx.sh
-sh boost-android.sh
+sh boost-iosx.sh $1
+sh boost-android.sh $1

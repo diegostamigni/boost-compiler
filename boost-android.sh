@@ -1,4 +1,13 @@
 #!/bin/bash
+BOOST_VERSION="1.60.0"
+BOOST_SRC="$(pwd)/boost"
+
+if [ -z "$1" ]; then
+	echo "BOOST_VERSION has not been specified, will use $BOOST_VERSION as default"
+else
+	BOOST_VERSION="$1"
+	echo "Using BOOST_VERSION: $BOOST_VERSION"
+fi
 
 if [[ $NDK_ROOT = *[!\ ]* ]]; then
     echo "Using the Android NDK: $NDK_ROOT"
@@ -8,9 +17,23 @@ else
 fi
 
 source bootstrap.sh
-mkdir android-build
 
-cd $(pwd)/boost
+if [ -d $BOOST_SRC ]
+then
+    cd $BOOST_SRC
+    git reset --hard
+    git checkout master
+    git fetch --all
+    git pull origin master
+else
+    git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
+    cd $BOOST_SRC
+fi
+    
+git checkout tags/boost-$BOOST_VERSION -b boost-$BOOST_VERSION
+git submodule sync
+git submodule update
+
 cp $(pwd)/tools/build/src/user-config.jam $(pwd)/tools/build/src/user-config.jam_iosx
 cp $(pwd)/../config/user-config-android.jam $(pwd)/tools/build/src/user-config.jam
 

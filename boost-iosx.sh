@@ -20,7 +20,7 @@
 #===============================================================================
 # Configuration section
 #===============================================================================
-BOOST_VERSION=1.60.0
+BOOST_VERSION="1.60.0"
 IOS_MIN_VERSION=8.0
 OSX_MIN_VERSION=10.9
 #===============================================================================
@@ -88,19 +88,31 @@ updateBoost()
 {
     echo Updating boost into $BOOST_SRC...
 
-	if [ -d $BOOST_SRC ]
-	then
-		git checkout $BOOST_SRC/tools/build/v2/user-config.jam
-	else
-		git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
-        git checkout tags/boost-$BOOST_VERSION
+    if [ -d $BOOST_SRC ]
+    then
+        pushd $BOOST_SRC
+        checkoutToVersion
+    else
+        git clone --recursive https://github.com/boostorg/boost.git $BOOST_SRC
 		pushd $BOOST_SRC
+        checkoutToVersion        
 		./bootstrap.sh
 		./b2 headers
 		popd
-	fi
+    fi
 
     doneSection
+}
+
+checkoutToVersion()
+{
+    git reset --hard
+    git checkout master
+    git fetch --all
+    git pull origin master
+    git checkout tags/boost-$BOOST_VERSION -b boost-$BOOST_VERSION
+    git submodule sync
+    git submodule update
 }
 
 #===============================================================================
@@ -138,7 +150,7 @@ buildBoostForiPhoneOS()
     
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphone
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -miphoneos-version-min=$IOS_MIN_VERSION -fembed-bitcode -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch armv7 -arch armv7s -arch arm64 -miphoneos-version-min=$IOS_MIN_VERSION -fembed-bitcode -fvisibility=hidden -fvisibility-inlines-hidden $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneOS.platform/Developer
    : <architecture>arm <target-os>iphone
    ;
@@ -151,7 +163,7 @@ EOF
 	
     cat > $BOOST_SRC/tools/build/src/user-config.jam <<EOF
 using darwin : ${IPHONE_SDKVERSION}~iphonesim
-   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -arch x86_64 -fvisibility-inlines-hidden -miphoneos-version-min=$IOS_MIN_VERSION $EXTRA_CPPFLAGS
+   : $XCODE_ROOT/Toolchains/XcodeDefault.xctoolchain/usr/bin/$COMPILER -arch i386 -arch x86_64 -fvisibility=hidden -fvisibility-inlines-hidden -miphoneos-version-min=$IOS_MIN_VERSION $EXTRA_CPPFLAGS
    : <striper> <root>$XCODE_ROOT/Platforms/iPhoneSimulator.platform/Developer
    : <architecture>x86 <target-os>iphone
    ;
@@ -351,6 +363,13 @@ packOSXUniversalLib()
 #===============================================================================
 # Execution starts here
 #===============================================================================
+
+if [ -z "$1" ]; then
+	echo "BOOST_VERSION has not been specified, will use $BOOST_VERSION as default"
+else
+	BOOST_VERSION="$1"
+	echo "Using BOOST_VERSION: $BOOST_VERSION"
+fi
 
 mkdir -p $IOSBUILDDIR
 
