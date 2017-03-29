@@ -6,11 +6,11 @@ if [ os.name ] = CYGWIN || [ os.name ] = NT
 }  
 else if [ os.name ] = LINUX  
 {  
-    androidPlatform = linux-x86 ;  
+    androidPlatform = linux-x86_64 ;  
 }  
 else if [ os.name ] = MACOSX  
 {  
-    androidPlatform = darwin-x86 ;  
+    androidPlatform = darwin-x86_64 ;  
 }
   
 modules.poke : NO_BZIP2 : 1 ;  
@@ -18,7 +18,7 @@ modules.poke : NO_BZIP2 : 1 ;
 local ANDROID_NDK = [ os.environ NDK_ROOT ] ; 
 
 using gcc : android :  
-$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-g++ :  
+$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-g++ :  
 <compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-arm  
 <compileflags>-mthumb  
 <compileflags>-Os  
@@ -27,13 +27,13 @@ $(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/
 <compileflags>-DNDEBUG  
 <compileflags>-g  
 <compileflags>-lstdc++  
-<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.8/include
-<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi/include
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/include
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi/include
 <compileflags>-D__GLIBC__
 <compileflags>-D_GLIBCXX__PTHREADS
 <compileflags>-D__arm__
 <compileflags>-D_REENTRANT
-<archiver>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ar  
-<ranlib>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ranlib  
+<archiver>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ar  
+<ranlib>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ranlib  
 ;
 
