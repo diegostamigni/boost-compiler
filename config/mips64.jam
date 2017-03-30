@@ -1,0 +1,53 @@
+import os ;  
+  
+if [ os.name ] = CYGWIN || [ os.name ] = NT  
+{  
+    androidPlatform = windows ;  
+}  
+else if [ os.name ] = LINUX  
+{  
+    androidPlatform = linux-x86_64 ;  
+}  
+else if [ os.name ] = MACOSX  
+{  
+    androidPlatform = darwin-x86_64 ;  
+}
+  
+modules.poke : NO_BZIP2 : 1 ;  
+
+local ANDROID_NDK = [ os.environ ANDROID_NDK_ROOT ] ; 
+
+using gcc : android :  
+$(ANDROID_NDK)/toolchains/mips64el-linux-android-4.9/prebuilt/$(androidPlatform)/bin/mips64el-linux-android-g++ :  
+<compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-mips
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/include
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/libs/mips64/include
+<compileflags>-I$(ANDROID_NDK)/platforms/android-9/arch-mips/usr/include
+<compileflags>-std=c++11
+<compileflags>-fexceptions
+<compileflags>-frtti
+<compileflags>-fpic
+<compileflags>-ffunction-sections
+<compileflags>-funwind-tables
+<compileflags>-Wno-psabi
+<compileflags>-mtune=xscale
+<compileflags>-msoft-float
+<compileflags>-mthumb
+<compileflags>-Os
+<compileflags>-fomit-frame-pointer
+<compileflags>-fno-strict-aliasing
+<compileflags>-finline-limit=64
+<compileflags>-Wa,--noexecstack
+<compileflags>-DANDROID
+<compileflags>-D__ANDROID__
+<compileflags>-DNDEBUG
+<compileflags>-O2
+<compileflags>-g
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-fdata-sections
+<cxxflags>-D_REENTRANT
+<cxxflags>-D_GLIBCXX__PTHREADS
+<archiver>$(ANDROID_NDK)/toolchains/mips64el-linux-android-4.9/prebuilt/$(androidPlatform)/bin/mips64el-linux-android-ar  
+<ranlib>$(ANDROID_NDK)/toolchains/mips64el-linux-android-4.9/prebuilt/$(androidPlatform)/bin/mips64el-linux-android-ranlib  
+;
