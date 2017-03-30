@@ -15,7 +15,7 @@ else if [ os.name ] = MACOSX
   
 modules.poke : NO_BZIP2 : 1 ;  
 
-local ANDROID_NDK = [ os.environ NDK_ROOT ] ; 
+local ANDROID_NDK = [ os.environ ANDROID_NDK_ROOT ] ; 
 
 using gcc : android :  
 $(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-g++ :  
@@ -33,6 +33,7 @@ $(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/
 <compileflags>-D_GLIBCXX__PTHREADS
 <compileflags>-D__arm__
 <compileflags>-D_REENTRANT
+<compileflags>--std=c++11
 <archiver>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ar  
 <ranlib>$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/bin/arm-linux-androideabi-ranlib  
 ;

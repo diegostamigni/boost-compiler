@@ -113,6 +113,7 @@ checkoutToVersion()
     git checkout tags/boost-$BOOST_VERSION -b boost-$BOOST_VERSION
     git submodule sync
     git submodule update
+    git clean -d -f
 }
 
 #===============================================================================
