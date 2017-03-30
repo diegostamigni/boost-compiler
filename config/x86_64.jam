@@ -19,9 +19,10 @@ local ANDROID_NDK = [ os.environ ANDROID_NDK_ROOT ] ;
 
 using gcc : android :  
 $(ANDROID_NDK)/toolchains/x86_64-4.9/prebuilt/$(androidPlatform)/bin/x86_64-linux-android-g++ :  
-<compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-x86_64
+<compileflags>--sysroot=$(ANDROID_NDK)/platforms/android-9/arch-x86
 <compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/include
-<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86_64/include
+<compileflags>-I$(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include
+<compileflags>-I$(ANDROID_NDK)/platforms/android-9/arch-x86/usr/include
 <compileflags>-I$(ANDROID_NDK)/platforms/android-9/arch-x86_64/usr/include
 <compileflags>-std=c++11
 <compileflags>-fexceptions
@@ -29,10 +30,6 @@ $(ANDROID_NDK)/toolchains/x86_64-4.9/prebuilt/$(androidPlatform)/bin/x86_64-linu
 <compileflags>-fpic
 <compileflags>-ffunction-sections
 <compileflags>-funwind-tables
-<compileflags>-Wno-psabi
-<compileflags>-mtune=xscale
-<compileflags>-msoft-float
-<compileflags>-mthumb
 <compileflags>-Os
 <compileflags>-fomit-frame-pointer
 <compileflags>-fno-strict-aliasing
@@ -46,6 +43,7 @@ $(ANDROID_NDK)/toolchains/x86_64-4.9/prebuilt/$(androidPlatform)/bin/x86_64-linu
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-fdata-sections
+<architecture>i686
 <cxxflags>-D_REENTRANT
 <cxxflags>-D_GLIBCXX__PTHREADS
 <archiver>$(ANDROID_NDK)/toolchains/x86_64-4.9/prebuilt/$(androidPlatform)/bin/x86_64-linux-android-ar  

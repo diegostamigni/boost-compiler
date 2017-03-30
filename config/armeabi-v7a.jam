@@ -29,12 +29,10 @@ $(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(androidPlatform)/
 <compileflags>-fpic
 <compileflags>-ffunction-sections
 <compileflags>-funwind-tables
-<compileflags>-D__ARM_ARCH_5__
-<compileflags>-D__ARM_ARCH_5T__
-<compileflags>-D__ARM_ARCH_5E__
-<compileflags>-D__ARM_ARCH_5TE__
+<compileflags>-D__ARM_ARCH_7__
+<compileflags>-D__ARM_ARCH_7A__
 <compileflags>-Wno-psabi
-<compileflags>-march=armv5te
+<compileflags>-march=armv7-a
 <compileflags>-mtune=xscale
 <compileflags>-msoft-float
 <compileflags>-mthumb
